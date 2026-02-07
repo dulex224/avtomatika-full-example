@@ -1,0 +1,14 @@
+# This is an example TOML file for configuring API clients.
+# The orchestrator loads this to manage access control and quotas.
+
+[client_vip]
+token = "user_token_vip"
+plan = "vip"
+params = { features = ["all"] }
+monthly_attempts = 10000
+
+[limited-client]
+token = "limited-access-token"
+plan = "basic"
+params = { languages = ["en"], features = ["basic_transcode"] }
+monthly_attempts = 2

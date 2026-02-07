@@ -1,0 +1,48 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.venv
+env/
+venv/
+ENV/
+
+# Database
+*.db
+*.sqlite3
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+.DS_Store?
+ehthumbs.db
+Icon?
+Thumbs.db
+
+# IDEs and Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Testing and Linters
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Example specific
+
+.env
+
+payloads/
+
+avtomatika_history.db
+
+*.png
+
+!docs/images/*.png

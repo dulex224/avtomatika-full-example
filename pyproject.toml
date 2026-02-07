@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "avtomatika-full-example"
+version = "1.0b11+w1.0b5.0"
+description = "Comprehensive example for Avtomatika HLN Orchestrator"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+dependencies = [
+    "avtomatika[all]==1.0b11",
+    "avtomatika-worker==1.0b5",
+    "aiohttp>=3.12",
+    "orjson>=3.11",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["*.py"]

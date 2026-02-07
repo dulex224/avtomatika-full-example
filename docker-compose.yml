@@ -1,0 +1,151 @@
+version: '3.8'
+
+services:
+  # --- Infrastructure ---
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: avtomatika
+    ports:
+      - "5432:5432"
+
+  minio:
+    image: minio/minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9001"
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "16686:16686" # UI
+      - "4317:4317"   # OTLP gRPC
+      - "4318:4318"   # OTLP HTTP
+
+  victoriametrics:
+    image: victoriametrics/victoria-metrics:v1.93.0
+    ports:
+      - "8428:8428"
+    volumes:
+      - ./ops/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - "-promscrape.config=/etc/prometheus/prometheus.yml"
+      - "-promscrape.configCheckInterval=10s"
+
+  grafana:
+    image: grafana/grafana:10.0.0
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./ops/grafana/datasources:/etc/grafana/provisioning/datasources
+      - ./ops/grafana/dashboards:/etc/grafana/provisioning/dashboards
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    depends_on:
+      - victoriametrics
+
+  webhook-receiver:
+    build:
+      context: ../..
+      dockerfile: projects/avtomatika_full_example/Dockerfile.dev
+      network: host
+    dns: 8.8.8.8
+    command: ["python", "webhook_receiver.py"]
+    ports:
+      - "8000:8000"
+    environment:
+      - LOG_LEVEL=INFO
+
+
+  # --- Avtomatika Orchestrator ---
+  orchestrator:
+    build:
+      context: ../..
+      dockerfile: projects/avtomatika_full_example/Dockerfile.dev
+      network: host
+    dns: 8.8.8.8
+    environment:
+      - REDIS_HOST=redis
+      - HISTORY_DATABASE_URI=postgresql://user:password@postgres:5432/avtomatika
+      - S3_ENDPOINT_URL=http://minio:9000
+      - S3_ACCESS_KEY=minioadmin
+      - S3_SECRET_KEY=minioadmin
+      - S3_DEFAULT_BUCKET=avtomatika-payloads
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+      - OTEL_SERVICE_NAME=avtomatika-orchestrator
+      - LOG_LEVEL=INFO
+      - SCHEDULES_CONFIG_PATH=/app/example/schedules.toml
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./schedules.toml:/app/example/schedules.toml
+    depends_on:
+      - redis
+      - postgres
+      - minio
+      - jaeger
+
+  # --- Avtomatika Workers ---
+  worker-gpu:
+    build:
+      context: ../..
+      dockerfile: projects/avtomatika_full_example/Dockerfile.dev
+      network: host
+    dns: 8.8.8.8
+    command: ["python", "workers/gpu.py"]
+    environment:
+      - WORKER_ID=gpu-worker-01
+      - WORKER_TOKEN=super-secret-gpu-worker-token
+      - ORCHESTRATOR_URL=http://orchestrator:8080
+      - S3_ENDPOINT_URL=http://minio:9000
+      - S3_ACCESS_KEY=minioadmin
+      - S3_SECRET_KEY=minioadmin
+      - S3_DEFAULT_BUCKET=avtomatika-payloads
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+      - OTEL_SERVICE_NAME=gpu-worker
+    depends_on:
+      - orchestrator
+
+  worker-cpu-1:
+    build:
+      context: ../..
+      dockerfile: projects/avtomatika_full_example/Dockerfile.dev
+      network: host
+    dns: 8.8.8.8
+    command: ["python", "workers/cpu_unreliable.py"]
+    environment:
+      - WORKER_ID=cpu-worker-01
+      - WORKER_TOKEN=super-secret-cpu-worker-token
+      - ORCHESTRATOR_URL=http://orchestrator:8080
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+      - OTEL_SERVICE_NAME=cpu-worker-unreliable
+    depends_on:
+      - orchestrator
+
+  worker-cpu-2:
+    build:
+      context: ../..
+      dockerfile: projects/avtomatika_full_example/Dockerfile.dev
+      network: host
+    dns: 8.8.8.8
+    command: ["python", "workers/cpu_reliable.py"]
+    environment:
+      - WORKER_ID=cpu-worker-02
+      - WORKER_TOKEN=super-secret-cpu-worker-token-2
+      - ORCHESTRATOR_URL=http://orchestrator:8080
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+      - OTEL_SERVICE_NAME=cpu-worker-reliable
+    depends_on:
+      - orchestrator

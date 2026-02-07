@@ -1,0 +1,10 @@
+# Example Schedule Configuration for Avtomatika Native Scheduler
+
+[maintenance_task]
+blueprint = "periodic_maintenance"
+interval_seconds = 60
+enabled = true
+
+[maintenance_task.initial_data]
+source = "scheduler"
+task_type = "cleanup"
